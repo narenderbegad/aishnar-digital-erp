@@ -17,6 +17,7 @@ interface HeaderProps {
   onOpenSearch: () => void;
   onOpenNotifications: () => void;
   onOpenTvBoard: () => void;
+  onOpenAdminGuide: () => void;
   unreadCount: number;
 }
 
@@ -38,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   setIsDark,
   onOpenSearch,
   onOpenNotifications,
+  onOpenAdminGuide,
   unreadCount
 }) => {
   const title = TAB_TITLES[currentTab] || 'Dashboard';
@@ -51,6 +53,15 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="flex items-center space-x-3">
+        {/* Admin Guide & Pitch Button */}
+        <button
+          onClick={onOpenAdminGuide}
+          className="flex items-center space-x-1.5 text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition-colors shadow-2xs"
+          title="Open Visual Guide & 5-Min Client Demo Pitch"
+        >
+          <span>🎓</span>
+          <span>Admin Guide & Demo</span>
+        </button>
         {/* Role Switcher */}
         <div className="flex items-center space-x-1.5 text-xs text-slate-500 bg-slate-50 dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800">
           <UserCheck className="w-3.5 h-3.5 text-slate-400" />

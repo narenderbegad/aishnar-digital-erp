@@ -4,6 +4,7 @@ import { Header } from './components/layout/Header';
 import { TVWallboard } from './components/common/TVWallboard';
 import { NotificationsDrawer } from './components/common/NotificationsDrawer';
 import { SearchModal } from './components/common/SearchModal';
+import { AdminVisualGuideModal } from './components/common/AdminVisualGuideModal';
 
 import { TodayView } from './components/views/TodayView';
 import { ProjectsView } from './components/views/ProjectsView';
@@ -24,6 +25,7 @@ export function App() {
   const [isTvBoardOpen, setIsTvBoardOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isAdminGuideOpen, setIsAdminGuideOpen] = useState(false);
 
   // Sync state to LocalStorage
   const handleUpdateState = (newState: ERPStoreState) => {
@@ -78,6 +80,7 @@ export function App() {
         userName={state.currentUser.name}
         userRoleName={getRoleName(userRole)}
         onOpenTvBoard={() => setIsTvBoardOpen(true)}
+        onOpenAdminGuide={() => setIsAdminGuideOpen(true)}
       />
 
       {/* Main App Container */}
@@ -92,6 +95,7 @@ export function App() {
           onOpenSearch={() => setIsSearchOpen(true)}
           onOpenNotifications={() => setIsNotificationsOpen(true)}
           onOpenTvBoard={() => setIsTvBoardOpen(true)}
+          onOpenAdminGuide={() => setIsAdminGuideOpen(true)}
           unreadCount={3}
         />
 
@@ -167,6 +171,12 @@ export function App() {
       <NotificationsDrawer
         isOpen={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
+      />
+
+      <AdminVisualGuideModal
+        isOpen={isAdminGuideOpen}
+        onClose={() => setIsAdminGuideOpen(false)}
+        onNavigateTab={(tab) => setCurrentTab(tab)}
       />
     </div>
   );

@@ -1,13 +1,13 @@
 import React from 'react';
-import { 
-  LayoutDashboard, 
-  FolderKanban, 
-  Receipt, 
-  MessagesSquare, 
-  BadgePercent, 
-  UserCheck, 
-  Settings, 
-  Tv, 
+import {
+  LayoutDashboard,
+  FolderKanban,
+  Receipt,
+  MessagesSquare,
+  BadgePercent,
+  UserCheck,
+  Settings,
+  Tv,
   Lock
 } from 'lucide-react';
 import { UserRole } from '../../types';
@@ -19,6 +19,7 @@ interface SidebarProps {
   userName: string;
   userRoleName: string;
   onOpenTvBoard: () => void;
+  onOpenAdminGuide: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -27,7 +28,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   userRole,
   userName,
   userRoleName,
-  onOpenTvBoard
+  onOpenTvBoard,
+  onOpenAdminGuide
 }) => {
   const isSuperAdmin = userRole === 'super_admin';
   const isSalesAdmin = userRole === 'sales_admin' || isSuperAdmin;
@@ -60,11 +62,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="space-y-1">
             <button
               onClick={() => setCurrentTab('today')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                currentTab === 'today'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${currentTab === 'today'
                   ? 'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white font-semibold'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
-              }`}
+                }`}
             >
               <div className="flex items-center space-x-2.5">
                 <LayoutDashboard className="w-4 h-4 text-slate-400" />
@@ -74,11 +75,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <button
               onClick={() => setCurrentTab('projects')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                currentTab === 'projects'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${currentTab === 'projects'
                   ? 'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white font-semibold'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
-              }`}
+                }`}
             >
               <div className="flex items-center space-x-2.5">
                 <FolderKanban className="w-4 h-4 text-slate-400" />
@@ -88,11 +88,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <button
               onClick={() => setCurrentTab('finance')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                currentTab === 'finance'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${currentTab === 'finance'
                   ? 'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white font-semibold'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
-              }`}
+                }`}
             >
               <div className="flex items-center space-x-2.5">
                 <Receipt className="w-4 h-4 text-slate-400" />
@@ -102,11 +101,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <button
               onClick={() => setCurrentTab('comms')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                currentTab === 'comms'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${currentTab === 'comms'
                   ? 'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white font-semibold'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
-              }`}
+                }`}
             >
               <div className="flex items-center space-x-2.5">
                 <MessagesSquare className="w-4 h-4 text-slate-400" />
@@ -124,13 +122,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="space-y-1">
             <button
               onClick={() => setCurrentTab('sales')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                currentTab === 'sales'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${currentTab === 'sales'
                   ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 font-semibold'
                   : isSalesAdmin
-                  ? 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  : 'opacity-40 cursor-not-allowed text-slate-400'
-              }`}
+                    ? 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
+                    : 'opacity-40 cursor-not-allowed text-slate-400'
+                }`}
             >
               <div className="flex items-center space-x-2.5">
                 <BadgePercent className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -141,13 +138,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <button
               onClick={() => setCurrentTab('activation')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                currentTab === 'activation'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${currentTab === 'activation'
                   ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 font-semibold'
                   : isSuperAdmin
-                  ? 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  : 'opacity-40 cursor-not-allowed text-slate-400'
-              }`}
+                    ? 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
+                    : 'opacity-40 cursor-not-allowed text-slate-400'
+                }`}
             >
               <div className="flex items-center space-x-2.5">
                 <UserCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -158,11 +154,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <button
               onClick={() => setCurrentTab('settings')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                currentTab === 'settings'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${currentTab === 'settings'
                   ? 'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white font-semibold'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/40'
-              }`}
+                }`}
             >
               <div className="flex items-center space-x-2.5">
                 <Settings className="w-4 h-4 text-slate-400" />
@@ -177,6 +172,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex items-center space-x-2.5">
                 <Tv className="w-4 h-4 text-slate-400" />
                 <span>Office TV Display</span>
+              </div>
+            </button>
+
+            <button
+              onClick={onOpenAdminGuide}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50/60 dark:bg-emerald-950/30 hover:bg-emerald-100 transition-colors"
+            >
+              <div className="flex items-center space-x-2.5">
+                <span>🎓</span>
+                <span>Demo & Sales Guide</span>
               </div>
             </button>
           </div>

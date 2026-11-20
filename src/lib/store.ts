@@ -34,11 +34,12 @@ export interface ERPStoreState {
 // Initial Clean Production Business Data (Zero wedding data, zero dummy mock text)
 const defaultState: ERPStoreState = {
   currentUser: {
-    id: 'usr-001',
-    name: 'Aishnar Admin',
-    email: 'admin@aishnardigital.com',
+    id: 'usr-admin-01',
+    name: 'Narender Begad',
+    email: 'Narender@aishnar.com',
+    password: '#Narender0077',
     role: 'super_admin',
-    department: 'Executive Leadership',
+    department: 'Executive Leadership & Founder',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
     isActive: true,
     licenseKey: 'AISH-ENT-2026-HQ01-8890',
@@ -48,11 +49,12 @@ const defaultState: ERPStoreState = {
   },
   users: [
     {
-      id: 'usr-001',
-      name: 'Aishnar Admin',
-      email: 'admin@aishnardigital.com',
+      id: 'usr-admin-01',
+      name: 'Narender Begad',
+      email: 'Narender@aishnar.com',
+      password: '#Narender0077',
       role: 'super_admin',
-      department: 'Executive Leadership',
+      department: 'Executive Leadership & Founder',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       isActive: true,
       licenseKey: 'AISH-ENT-2026-HQ01-8890',
@@ -61,9 +63,10 @@ const defaultState: ERPStoreState = {
       joinedAt: '2025-01-10',
     },
     {
-      id: 'usr-002',
+      id: 'usr-sales-02',
       name: 'Vikramaditya Rathore',
-      email: 'vikram@aishnardigital.com',
+      email: 'vikram@aishnar.com',
+      password: 'Vikram@2026',
       role: 'sales_admin',
       department: 'SaaS Software Sales & Growth',
       avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
@@ -74,9 +77,10 @@ const defaultState: ERPStoreState = {
       joinedAt: '2025-03-15',
     },
     {
-      id: 'usr-003',
+      id: 'usr-pm-03',
       name: 'Priyanka Sen',
-      email: 'priyanka.sen@aishnardigital.com',
+      email: 'priyanka@aishnar.com',
+      password: 'Priyanka@2026',
       role: 'project_manager',
       department: 'Enterprise Delivery & Engineering',
       avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
@@ -87,9 +91,10 @@ const defaultState: ERPStoreState = {
       joinedAt: '2025-04-01',
     },
     {
-      id: 'usr-004',
+      id: 'usr-eng-04',
       name: 'Rohit Khandelwal',
-      email: 'rohit.k@aishnardigital.com',
+      email: 'rohit@aishnar.com',
+      password: 'Rohit@2026',
       role: 'team_member',
       department: 'Full Stack Cloud Development',
       avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
@@ -100,13 +105,14 @@ const defaultState: ERPStoreState = {
       joinedAt: '2025-06-12',
     },
     {
-      id: 'usr-005',
+      id: 'usr-client-05',
       name: 'Ananya Mehra',
       email: 'ananya@apexfinancial.com',
+      password: 'Apex@2026',
       role: 'client_viewer',
       department: 'Client Representative',
       avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
-      isActive: false, // Inactive example to demonstrate 1-click activation!
+      isActive: true,
       licenseKey: 'AISH-STARTER-2026-88F1-44B2',
       organizationName: 'Apex Financial Services',
       phone: '+91 98110 33445',
@@ -521,7 +527,28 @@ export function loadStore(): ERPStoreState {
       saveStore(defaultState);
       return defaultState;
     }
-    return JSON.parse(raw);
+    const parsed: ERPStoreState = JSON.parse(raw);
+    
+    // Ensure Super Admin Narender is always configured with exact requested credentials
+    const adminIndex = parsed.users.findIndex(u => u.email.toLowerCase() === 'narender@aishnar.com');
+    if (adminIndex >= 0) {
+      parsed.users[adminIndex].password = '#Narender0077';
+      parsed.users[adminIndex].role = 'super_admin';
+      parsed.users[adminIndex].isActive = true;
+    } else {
+      parsed.users = [defaultState.currentUser, ...parsed.users];
+    }
+
+    // Ensure all seeded users have passwords
+    parsed.users.forEach(u => {
+      if (!u.password) {
+        if (u.email.toLowerCase() === 'narender@aishnar.com') u.password = '#Narender0077';
+        else u.password = 'Aishnar@2026';
+      }
+    });
+
+    saveStore(parsed);
+    return parsed;
   } catch (e) {
     console.error('Error loading store from localStorage:', e);
     return defaultState;

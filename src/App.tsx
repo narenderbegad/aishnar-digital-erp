@@ -5,6 +5,7 @@ import { TVWallboard } from './components/common/TVWallboard';
 import { NotificationsDrawer } from './components/common/NotificationsDrawer';
 import { SearchModal } from './components/common/SearchModal';
 import { AdminVisualGuideModal } from './components/common/AdminVisualGuideModal';
+import { LoginView } from './components/auth/LoginView';
 
 import { TodayView } from './components/views/TodayView';
 import { ProjectsView } from './components/views/ProjectsView';
@@ -15,12 +16,23 @@ import { UserActivationView } from './components/views/UserActivationView';
 import { SettingsView } from './components/views/SettingsView';
 
 import { loadStore, saveStore, ERPStoreState } from './lib/store';
-import { UserRole } from './types';
+import { UserRole, UserProfile } from './types';
+
+const AUTH_STORAGE_KEY = 'aishnar_erp_auth_user_v1';
 
 export function App() {
   const [state, setState] = useState<ERPStoreState>(loadStore);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
+    try {
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const [currentTab, setCurrentTab] = useState('today');
-  const [userRole, setUserRole] = useState<UserRole>('super_admin');
+  const [userRole, setUserRole] = useState<UserRole>(() => currentUser?.role || 'super_admin');
   const [isDark, setIsDark] = useState(false);
   const [isTvBoardOpen, setIsTvBoardOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -31,6 +43,17 @@ export function App() {
   const handleUpdateState = (newState: ERPStoreState) => {
     setState(newState);
     saveStore(newState);
+  };
+
+  const handleLogin = (user: UserProfile) => {
+    setCurrentUser(user);
+    setUserRole(user.role);
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem(AUTH_STORAGE_KEY);
   };
 
   // Sync theme with document element
@@ -59,10 +82,15 @@ export function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isTvBoardOpen, isSearchOpen, isNotificationsOpen]);
 
+  // If unauthenticated, show secure Login View
+  if (!currentUser) {
+    return <LoginView users={state.users} onLogin={handleLogin} />;
+  }
+
   // Role friendly name
   const getRoleName = (role: UserRole) => {
     switch (role) {
-      case 'super_admin': return 'Super Admin (Aishnar Leadership)';
+      case 'super_admin': return 'Super Admin (Founder)';
       case 'sales_admin': return 'Sales Admin (SaaS Revenue)';
       case 'project_manager': return 'Enterprise Project Manager';
       case 'team_member': return 'Senior Cloud Engineer';
@@ -77,10 +105,11 @@ export function App() {
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         userRole={userRole}
-        userName={state.currentUser.name}
+        userName={currentUser.name}
         userRoleName={getRoleName(userRole)}
         onOpenTvBoard={() => setIsTvBoardOpen(true)}
         onOpenAdminGuide={() => setIsAdminGuideOpen(true)}
+        onLogout={handleLogout}
       />
 
       {/* Main App Container */}
@@ -96,12 +125,12 @@ export function App() {
           onOpenNotifications={() => setIsNotificationsOpen(true)}
           onOpenTvBoard={() => setIsTvBoardOpen(true)}
           onOpenAdminGuide={() => setIsAdminGuideOpen(true)}
-          unreadCount={3}
+          unreadCount={2}
         />
 
         {/* View Content */}
         <main className="flex-1 overflow-y-auto p-6 md:p-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             {currentTab === 'today' && (
               <TodayView
                 state={state}

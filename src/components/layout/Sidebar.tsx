@@ -1,14 +1,15 @@
 import React from 'react';
-import {
-  LayoutDashboard,
-  FolderKanban,
-  Receipt,
-  MessagesSquare,
-  BadgePercent,
-  UserCheck,
-  Settings,
-  Tv,
-  Lock
+import { 
+  LayoutDashboard, 
+  FolderKanban, 
+  Receipt, 
+  MessagesSquare, 
+  BadgePercent, 
+  UserCheck, 
+  Settings, 
+  Tv, 
+  Lock,
+  LogOut
 } from 'lucide-react';
 import { UserRole } from '../../types';
 
@@ -20,6 +21,7 @@ interface SidebarProps {
   userRoleName: string;
   onOpenTvBoard: () => void;
   onOpenAdminGuide: () => void;
+  onLogout: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -29,7 +31,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   userName,
   userRoleName,
   onOpenTvBoard,
-  onOpenAdminGuide
+  onOpenAdminGuide,
+  onLogout
 }) => {
   const isSuperAdmin = userRole === 'super_admin';
   const isSalesAdmin = userRole === 'sales_admin' || isSuperAdmin;
@@ -190,14 +193,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* User Footer Profile */}
       <div className="p-3 border-t border-slate-100 dark:border-slate-800/60">
-        <div className="flex items-center space-x-2.5 px-2 py-1.5 rounded-lg">
-          <div className="w-7 h-7 rounded-full bg-slate-900 dark:bg-slate-800 text-white font-medium flex items-center justify-center text-xs">
-            {userName.slice(0, 2).toUpperCase()}
+        <div className="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors">
+          <div className="flex items-center space-x-2.5 min-w-0">
+            <div className="w-7 h-7 rounded-full bg-slate-900 dark:bg-slate-800 text-white font-medium flex items-center justify-center text-xs shrink-0">
+              {userName.slice(0, 2).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-medium text-slate-900 dark:text-white truncate">{userName}</div>
+              <div className="text-[10px] text-slate-400 truncate">{userRoleName}</div>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-xs font-medium text-slate-900 dark:text-white truncate">{userName}</div>
-            <div className="text-[10px] text-slate-400 truncate">{userRoleName}</div>
-          </div>
+          <button
+            onClick={onLogout}
+            title="Sign Out"
+            className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 rounded-md transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </aside>

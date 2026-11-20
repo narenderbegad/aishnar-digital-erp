@@ -88,21 +88,57 @@ export interface ClientInvoice {
   status: 'draft' | 'sent' | 'paid' | 'overdue';
 }
 
+export type SalesFunnelStage = 
+  | 'lead_inbound' 
+  | 'discovery_demo' 
+  | 'proposal_quote' 
+  | 'security_legal' 
+  | 'contract_negotiation' 
+  | 'closed_won' 
+  | 'closed_lost';
+
 export interface SoftwareSalesDeal {
   id: string;
   companyName: string;
+  website?: string;
+  industry: string;
   contactName: string;
+  contactRole: string;
   contactEmail: string;
   contactPhone: string;
   planTier: 'Starter' | 'Professional' | 'Enterprise' | 'Custom White-Label';
+  seatsCount: number;
   dealValue: number;
-  billingCycle: 'monthly' | 'annual';
-  stage: 'Inbound Lead' | 'Demo Completed' | 'Proposal Submitted' | 'Contract Negotiation' | 'Closed Won';
+  mrr: number;
+  billingCycle: 'monthly' | 'annual' | 'multi_year';
+  paymentTerms: 'Net 15' | 'Net 30' | 'Annual Upfront' | 'Quarterly Advance';
+  stage: SalesFunnelStage;
   probability: number;
   createdDate: string;
   expectedCloseDate: string;
   assignedSalesRep: string;
   notes?: string;
+  nextStep?: string;
+  quotationNumber?: string;
+  discountPercent?: number;
+}
+
+export interface EnterpriseQuotation {
+  id: string;
+  quoteNumber: string;
+  dealId: string;
+  clientCompany: string;
+  clientContact: string;
+  clientEmail: string;
+  planTier: string;
+  seats: number;
+  baseAmount: number;
+  discountAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+  validUntil: string;
+  paymentTerms: string;
+  issuedAt: string;
 }
 
 export interface SoftwareLicense {

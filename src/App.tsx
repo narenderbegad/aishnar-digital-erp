@@ -6,6 +6,7 @@ import { NotificationsDrawer } from './components/common/NotificationsDrawer';
 import { SearchModal } from './components/common/SearchModal';
 import { AdminVisualGuideModal } from './components/common/AdminVisualGuideModal';
 import { LoginView } from './components/auth/LoginView';
+import { LandingPageView } from './components/landing/LandingPageView';
 
 import { TodayView } from './components/views/TodayView';
 import { ProjectsView } from './components/views/ProjectsView';
@@ -33,7 +34,8 @@ export default function App() {
 
   const [currentTab, setCurrentTab] = useState('today');
   const [userRole, setUserRole] = useState<UserRole>(() => currentUser?.role || 'super_admin');
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true); // Default to AishNar Obsidian Dark Mode
+  const [showLoginView, setShowLoginView] = useState(false);
   const [isTvBoardOpen, setIsTvBoardOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -49,19 +51,30 @@ export default function App() {
     setCurrentUser(user);
     setUserRole(user.role);
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+    setShowLoginView(false);
   };
 
   const handleLogout = () => {
     setCurrentUser(null);
     localStorage.removeItem(AUTH_STORAGE_KEY);
+    setShowLoginView(false);
+  };
+
+  // 1-Click Launch Demo mode for event planners evaluating the software
+  const handleLaunchDemo = () => {
+    // Log in as Super Admin Narender to give buyers complete view of the product
+    const adminUser = state.users.find(u => u.email.toLowerCase() === 'narender@aishnar.com') || state.currentUser;
+    handleLogin(adminUser);
   };
 
   // Sync theme with document element
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
     }
   }, [isDark]);
 
@@ -83,24 +96,40 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isTvBoardOpen, isSearchOpen, isNotificationsOpen, isAdminGuideOpen]);
 
-  // If unauthenticated, show secure Login View
+  // If unauthenticated:
+  // Show high-converting Commercial Landing Page by default, with secure Sign-In option
   if (!currentUser) {
-    return <LoginView users={state.users} onLogin={handleLogin} />;
+    if (showLoginView) {
+      return (
+        <LoginView
+          users={state.users}
+          onLogin={handleLogin}
+          onBackToLanding={() => setShowLoginView(false)}
+        />
+      );
+    }
+
+    return (
+      <LandingPageView
+        onOpenLogin={() => setShowLoginView(true)}
+        onLaunchDemo={handleLaunchDemo}
+      />
+    );
   }
 
   // Role friendly name
   const getRoleName = (role: UserRole) => {
     switch (role) {
-      case 'super_admin': return 'Super Admin';
-      case 'sales_admin': return 'Sales Director';
-      case 'project_manager': return 'Delivery Lead';
-      case 'team_member': return 'Operations Specialist';
-      case 'client_viewer': return 'Client Observer';
+      case 'super_admin': return 'Super Admin & Founder';
+      case 'sales_admin': return 'Software Sales Director';
+      case 'project_manager': return 'Lead Wedding Producer';
+      case 'team_member': return 'Event Operations Specialist';
+      case 'client_viewer': return 'VIP Client Portal';
     }
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#000000] font-sans antialiased text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#0d0d12] font-sans antialiased text-white selection:bg-[#00ff66]/30 transition-colors">
       {/* Left Sidebar */}
       <Sidebar
         currentTab={currentTab}
@@ -114,7 +143,7 @@ export default function App() {
       />
 
       {/* Main App Container */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#0d0d12]">
         {/* Top Header */}
         <Header
           currentTab={currentTab}

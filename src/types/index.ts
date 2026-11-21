@@ -61,6 +61,10 @@ export interface EnterpriseProject {
   deliverablesCount: number;
   openTasksCount: number;
   criticalAlert?: string;
+  venue?: string;
+  guestCount?: number;
+  eventType?: 'Destination Wedding' | 'Luxury Royal Wedding' | 'Celebrity Gala' | 'High-Net-Worth Conclave';
+  countdownDays?: number;
 }
 
 export interface ExpenseClaim {

@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import { 
   Database, 
   Cloud, 
-  Server, 
-  CheckCircle2, 
-  AlertCircle, 
   Copy, 
   Check, 
-  ExternalLink,
-  Code,
-  ShieldCheck,
   RefreshCw
 } from 'lucide-react';
 import { getSupabaseStatus } from '../../lib/supabase';
@@ -19,8 +13,8 @@ interface SettingsViewProps {
   state: ERPStoreState;
 }
 
-export const SettingsView: React.FC<SettingsViewProps> = ({ state }) => {
-  const [supabaseStatus, setSupabaseStatus] = useState(getSupabaseStatus());
+export const SettingsView: React.FC<SettingsViewProps> = () => {
+  const [supabaseStatus] = useState(getSupabaseStatus());
   const [copiedSQL, setCopiedSQL] = useState(false);
   const [testResult, setTestResult] = useState<string | null>(null);
 
@@ -65,16 +59,16 @@ create table if not exists users_directory (
       } else {
         setTestResult('Using local persistent storage. To connect live Supabase, set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.');
       }
-    }, 800);
+    }, 600);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl">
       {/* Top Banner */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <Database className="w-5 h-5 text-emerald-500" />
-          Backend Architecture, Supabase & Cloud Hosting
+      <div className="apple-card rounded-2xl p-6 sm:p-7">
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+          <Database className="w-4 h-4 text-emerald-500" />
+          <span>Backend Architecture & Cloud Hosting</span>
         </h2>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
           Aishnar Digital-ERP is built for rapid commercial delivery. It supports 1-click cloud sync with Supabase PostgreSQL and automated deployment to Netlify and Render.
@@ -83,124 +77,102 @@ create table if not exists users_directory (
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Supabase Database Integration */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div className="apple-card rounded-2xl p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-black/[0.04] dark:border-white/[0.06]">
             <div className="flex items-center gap-2">
               <Database className="w-4 h-4 text-emerald-500" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-xs font-semibold text-slate-900 dark:text-white">
                 Supabase Cloud Database
               </h3>
             </div>
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded font-mono ${
+            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full font-mono ${
               supabaseStatus.configured 
-                ? 'bg-emerald-500/20 text-emerald-400' 
-                : 'bg-blue-500/20 text-blue-400'
+                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
+                : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
             }`}>
-              {supabaseStatus.configured ? 'LIVE CONNECTED' : 'HYBRID PERSISTENCE READY'}
+              {supabaseStatus.configured ? 'LIVE CONNECTED' : 'PERSISTENCE ACTIVE'}
             </span>
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60">
-              <div className="text-slate-400 text-[11px]">Database Endpoint</div>
-              <div className="font-mono font-semibold text-slate-800 dark:text-slate-200 mt-0.5 truncate">
+            <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+              <div className="text-slate-400 text-[10px] uppercase font-semibold">Database Endpoint</div>
+              <div className="font-mono font-medium text-slate-800 dark:text-slate-200 mt-0.5 truncate">
                 {supabaseStatus.url}
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60">
-              <div className="text-slate-400 text-[11px]">Supabase Anon Key</div>
-              <div className="font-mono font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
-                {supabaseStatus.hasKey ? '••••••••••••••••••••••••' : 'Not Loaded (Using local persistent store)'}
+            <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+              <div className="text-slate-400 text-[10px] uppercase font-semibold">Supabase Anon Key</div>
+              <div className="font-mono font-medium text-slate-800 dark:text-slate-200 mt-0.5">
+                {supabaseStatus.hasKey ? '••••••••••••••••••••••••' : 'Using local persistent store'}
               </div>
             </div>
 
             <button
               onClick={handleTestConnection}
-              className="w-full py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl transition-colors flex items-center justify-center gap-2 text-xs"
+              className="w-full py-2 bg-black/[0.03] dark:bg-white/[0.05] hover:bg-black/[0.06] text-slate-800 dark:text-slate-200 font-medium rounded-xl transition-colors flex items-center justify-center gap-2 text-xs"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>Test Database Connection</span>
+              <span>Test Connection</span>
             </button>
 
             {testResult && (
-              <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-700 dark:text-slate-300">
+              <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] text-[11px] text-slate-600 dark:text-slate-400">
                 {testResult}
               </div>
             )}
           </div>
         </div>
 
-        {/* Card 2: Hosting & CI/CD (Netlify & Render) */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        {/* Card 2: Hosting & CI/CD */}
+        <div className="apple-card rounded-2xl p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-black/[0.04] dark:border-white/[0.06]">
             <div className="flex items-center gap-2">
               <Cloud className="w-4 h-4 text-blue-500" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                Netlify & Render Deployment Ready
+              <h3 className="text-xs font-semibold text-slate-900 dark:text-white">
+                Netlify & Render Deployments
               </h3>
             </div>
-            <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold font-mono">
-              PRODUCTION READY
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              DEPLOYED LIVE
             </span>
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 space-y-1.5">
-              <div className="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                <span>Netlify Static & Edge</span>
-                <span className="text-[10px] text-emerald-400 font-mono">netlify.toml configured</span>
-              </div>
-              <div className="text-[11px] text-slate-400">
-                Build command: <code className="font-mono text-emerald-500">npm run build</code> · Directory: <code className="font-mono text-emerald-500">dist</code>
-              </div>
+            <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+              <div className="text-slate-400 text-[10px] uppercase font-semibold">Production URL (Netlify)</div>
+              <a
+                href="https://aishnar-digital-erp.netlify.app/"
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-emerald-600 dark:text-emerald-400 hover:underline block truncate mt-0.5 font-medium"
+              >
+                https://aishnar-digital-erp.netlify.app/
+              </a>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 space-y-1.5">
-              <div className="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                <span>Render Web Service</span>
-                <span className="text-[10px] text-blue-400 font-mono">render.yaml configured</span>
-              </div>
-              <div className="text-[11px] text-slate-400">
-                Static Site / Node Web Service with auto-deploy on git push.
-              </div>
+            <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+              <div className="text-slate-400 text-[10px] uppercase font-semibold">Production URL (Render)</div>
+              <a
+                href="https://aishnar-digital-erp.onrender.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-blue-600 dark:text-blue-400 hover:underline block truncate mt-0.5 font-medium"
+              >
+                https://aishnar-digital-erp.onrender.com/
+              </a>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60">
-              <div className="text-slate-400 text-[11px]">Git Repository State</div>
-              <div className="font-mono font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
-                Local Git initialized · Author: narender begad
-              </div>
-            </div>
+            <button
+              onClick={handleCopySQL}
+              className="w-full py-2 bg-black/[0.03] dark:bg-white/[0.05] hover:bg-black/[0.06] text-slate-800 dark:text-slate-200 font-medium rounded-xl transition-colors flex items-center justify-center gap-2 text-xs"
+            >
+              {copiedSQL ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedSQL ? 'SQL Schema Copied' : 'Copy Supabase SQL Migration'}</span>
+            </button>
           </div>
         </div>
-      </div>
-
-      {/* SQL Migration Script Box */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Code className="w-4 h-4 text-amber-500" />
-              Supabase SQL Schema Script (supabase/schema.sql)
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Paste this schema into your Supabase SQL editor to create all required enterprise tables.
-            </p>
-          </div>
-
-          <button
-            onClick={handleCopySQL}
-            className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold"
-          >
-            {copiedSQL ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedSQL ? 'Copied SQL!' : 'Copy SQL Schema'}</span>
-          </button>
-        </div>
-
-        <pre className="p-4 rounded-xl bg-slate-950 text-slate-300 font-mono text-[11px] overflow-x-auto border border-slate-800">
-          {sampleSQL}
-        </pre>
       </div>
     </div>
   );

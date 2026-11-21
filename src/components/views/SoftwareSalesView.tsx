@@ -1,25 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  TrendingUp, 
   Plus, 
   Key, 
   Building2, 
-  Sparkles, 
   FileText, 
-  Filter, 
   Search, 
-  ChevronRight, 
   ArrowRight, 
-  CheckCircle2, 
-  Clock, 
-  Calendar, 
-  DollarSign, 
-  Users, 
-  Percent, 
-  Phone, 
-  Mail, 
-  Globe, 
-  X, 
   Check, 
   Copy, 
   Printer, 
@@ -28,7 +14,11 @@ import {
   BarChart3, 
   ShieldCheck, 
   ArrowUpRight,
-  ChevronDown
+  ChevronDown,
+  X,
+  Mail,
+  Phone,
+  Globe
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SoftwareSalesDeal, SoftwareLicense, SalesFunnelStage, EnterpriseQuotation } from '../../types';
@@ -39,17 +29,17 @@ interface SoftwareSalesViewProps {
   onUpdateState: (newState: ERPStoreState) => void;
 }
 
-const FUNNEL_STAGES: { id: SalesFunnelStage; label: string; description: string; color: string; bg: string }[] = [
-  { id: 'lead_inbound', label: '1. Inbound Leads', description: 'Budget qualified inquiries', color: 'text-slate-600 dark:text-slate-300', bg: 'bg-slate-100 dark:bg-slate-800' },
-  { id: 'discovery_demo', label: '2. Discovery & Demo', description: 'Live architecture walkthrough', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-950/40' },
-  { id: 'proposal_quote', label: '3. Proposal & Quote', description: 'Commercial quote submitted', color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-950/40' },
-  { id: 'security_legal', label: '4. Security & Legal', description: 'SOC2 / InfoSec review', color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-50 dark:bg-purple-950/40' },
-  { id: 'contract_negotiation', label: '5. Negotiation', description: 'Procurement & sign-off', color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-50 dark:bg-teal-950/40' },
-  { id: 'closed_won', label: '6. Closed Won', description: 'Payment received & provisioned', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/40' },
+const FUNNEL_STAGES: { id: SalesFunnelStage; label: string; description: string; dotColor: string }[] = [
+  { id: 'lead_inbound', label: 'Inbound Leads', description: 'Budget qualified inquiries', dotColor: 'bg-slate-400' },
+  { id: 'discovery_demo', label: 'Discovery & Demo', description: 'Architecture walkthrough', dotColor: 'bg-blue-500' },
+  { id: 'proposal_quote', label: 'Proposal & Quote', description: 'Formal commercial quote', dotColor: 'bg-amber-500' },
+  { id: 'security_legal', label: 'Security & Legal', description: 'SOC2 & InfoSec review', dotColor: 'bg-purple-500' },
+  { id: 'contract_negotiation', label: 'Negotiation', description: 'Procurement sign-off', dotColor: 'bg-teal-500' },
+  { id: 'closed_won', label: 'Closed Won', description: 'Paid & provisioned', dotColor: 'bg-emerald-500' },
 ];
 
 export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onUpdateState }) => {
-  const [viewMode, setViewMode] = useState<'kanban' | 'funnel' | 'table' | 'licenses' | 'quotes'>('kanban');
+  const [viewMode, setViewMode] = useState<'kanban' | 'funnel' | 'table' | 'licenses'>('kanban');
   const [selectedDeal, setSelectedDeal] = useState<SoftwareSalesDeal | null>(null);
   const [showAddDealModal, setShowAddDealModal] = useState(false);
   const [activeQuotation, setActiveQuotation] = useState<EnterpriseQuotation | null>(null);
@@ -89,7 +79,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
     const updated = state.salesDeals.map(d => {
       if (d.id === dealId) {
         if (nextStage === 'closed_won') {
-          confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+          confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
         }
         let newProb = 25;
         if (nextStage === 'discovery_demo') newProb = 45;
@@ -132,7 +122,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
       licenses: [newLicense, ...state.licenses],
     });
 
-    confetti({ particleCount: 100, spread: 70, origin: { y: 0.5 } });
+    confetti({ particleCount: 90, spread: 65, origin: { y: 0.5 } });
     setViewMode('licenses');
   };
 
@@ -142,7 +132,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
     const taxAmount = Math.round(baseAmount * 0.18); // 18% GST
     const quote: EnterpriseQuotation = {
       id: `qt-${Date.now()}`,
-      quoteNumber: deal.quotationNumber || `QT-AISH-2026-${Math.floor(100 + Math.random() * 900)}`,
+      quoteNumber: deal.quotationNumber || `AISH-QT-2026-${Math.floor(100 + Math.random() * 900)}`,
       dealId: deal.id,
       clientCompany: deal.companyName,
       clientContact: `${deal.contactName} (${deal.contactRole})`,
@@ -186,7 +176,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
       createdDate: new Date().toISOString().split('T')[0],
       expectedCloseDate: new Date(Date.now() + 21 * 86400000).toISOString().split('T')[0],
       assignedSalesRep: state.currentUser.name,
-      quotationNumber: `QT-AISH-2026-${Math.floor(100 + Math.random() * 900)}`,
+      quotationNumber: `AISH-QT-2026-${Math.floor(100 + Math.random() * 900)}`,
       notes,
     };
 
@@ -195,7 +185,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
       salesDeals: [newDeal, ...state.salesDeals],
     });
 
-    confetti({ particleCount: 70, spread: 60, origin: { y: 0.5 } });
+    confetti({ particleCount: 70, spread: 55, origin: { y: 0.5 } });
     setShowAddDealModal(false);
   };
 
@@ -215,91 +205,91 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
   return (
     <div className="space-y-6 max-w-7xl">
-      {/* Top Header & Master Telemetry */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-6">
+      {/* Top Header & Apple-style Telemetry */}
+      <div className="apple-card rounded-2xl p-6 sm:p-7 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold px-2 py-0.5 rounded-full uppercase">
-                ENTERPRISE REVENUE & SALES CRM
+              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                COMMERCIAL PIPELINE
               </span>
-              <span className="text-xs text-slate-400">Direct Software Commercials</span>
+              <span className="text-[11px] text-slate-400 font-medium">SaaS License & ARR Engine</span>
             </div>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-1">
-              Aishnar Digital-ERP Software Sales Engine
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
+              Software Sales & Revenue
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
-              Track enterprise client proposals, visual conversion funnel, license key provisioning, and revenue metrics.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
+              Track high-value enterprise proposals, conversion funnels, and cryptographic license provisioning.
             </p>
           </div>
 
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setShowAddDealModal(true)}
-              className="flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md shadow-emerald-600/20 transition-all"
+              className="flex items-center space-x-2 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-950 font-semibold text-xs px-4 py-2.5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5" />
               <span>New Enterprise Opportunity</span>
             </button>
           </div>
         </div>
 
-        {/* 5 Enterprise KPI Telemetry Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-2">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60">
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Pipeline ACV</div>
-            <div className="text-2xl font-black font-mono text-slate-900 dark:text-white mt-1">
+        {/* 5 Minimalist Executive KPI Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-1">
+          <div className="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Pipeline ACV</div>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white mt-1 font-mono">
               ₹{(totalPipelineValue / 100000).toFixed(2)}L
             </div>
-            <div className="text-[10px] text-slate-400 mt-0.5">{activePipelineDeals.length} Active Deals</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">{activePipelineDeals.length} active deals</div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60">
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Weighted Forecast</div>
-            <div className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400 mt-1">
+          <div className="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Weighted Forecast</div>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-400 mt-1 font-mono">
               ₹{(weightedPipelineValue / 100000).toFixed(2)}L
             </div>
-            <div className="text-[10px] text-emerald-600/80 mt-0.5">Probability Adjusted</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Probability adjusted</div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60">
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Annual Run Rate (ARR)</div>
-            <div className="text-2xl font-black font-mono text-slate-900 dark:text-white mt-1">
+          <div className="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Annual Run Rate (ARR)</div>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white mt-1 font-mono">
               ₹{(totalARR / 100000).toFixed(2)}L
             </div>
-            <div className="text-[10px] text-emerald-600 mt-0.5 flex items-center gap-0.5">
-              <ArrowUpRight className="w-3 h-3" /> +28% YoY Growth
+            <div className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5 flex items-center gap-0.5 font-medium">
+              <ArrowUpRight className="w-3 h-3" /> +28% YoY
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60">
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Monthly MRR</div>
-            <div className="text-2xl font-black font-mono text-slate-900 dark:text-white mt-1">
+          <div className="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Monthly MRR</div>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white mt-1 font-mono">
               ₹{totalMRR.toLocaleString('en-IN')}
             </div>
-            <div className="text-[10px] text-slate-400 mt-0.5">Recurring Inflow</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Recurring revenue</div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60">
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Win Rate</div>
-            <div className="text-2xl font-black font-mono text-slate-900 dark:text-white mt-1">
+          <div className="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Win Rate</div>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white mt-1 font-mono">
               {winRate}%
             </div>
-            <div className="text-[10px] text-slate-400 mt-0.5">Avg Deal: ₹{(averageDealSize / 100000).toFixed(1)}L</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Avg: ₹{(averageDealSize / 100000).toFixed(1)}L</div>
           </div>
         </div>
       </div>
 
-      {/* Control Bar: View Mode Switcher + Filters */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 dark:border-slate-800 pb-3">
-        {/* Segmented Control */}
-        <div className="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl text-xs">
+      {/* Control Bar: Apple Segmented Switcher + Search */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+        {/* Apple Segmented Control */}
+        <div className="inline-flex items-center p-1 bg-black/[0.04] dark:bg-white/[0.06] rounded-xl text-xs select-none">
           <button
             onClick={() => setViewMode('kanban')}
-            className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
               viewMode === 'kanban'
-                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-slate-800 text-slate-950 dark:text-white shadow-2xs font-semibold'
+                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Kanban className="w-3.5 h-3.5" />
@@ -308,22 +298,22 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
           <button
             onClick={() => setViewMode('funnel')}
-            className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
               viewMode === 'funnel'
-                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-slate-800 text-slate-950 dark:text-white shadow-2xs font-semibold'
+                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <BarChart3 className="w-3.5 h-3.5" />
-            <span>Visual Funnel</span>
+            <span>Sales Funnel</span>
           </button>
 
           <button
             onClick={() => setViewMode('table')}
-            className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
               viewMode === 'table'
-                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-slate-800 text-slate-950 dark:text-white shadow-2xs font-semibold'
+                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -332,18 +322,18 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
           <button
             onClick={() => setViewMode('licenses')}
-            className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
               viewMode === 'licenses'
-                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-slate-800 text-slate-950 dark:text-white shadow-2xs font-semibold'
+                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Key className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Customer Licenses ({state.licenses.length})</span>
+            <span>Licenses ({state.licenses.length})</span>
           </button>
         </div>
 
-        {/* Search & Filters */}
+        {/* Search & Tier Filter */}
         <div className="flex items-center space-x-2 text-xs">
           <div className="relative">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" />
@@ -352,27 +342,27 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
               placeholder="Search companies, contacts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none text-xs w-48 sm:w-60"
+              className="pl-8 pr-3 py-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none text-xs w-48 sm:w-56"
             />
           </div>
 
           <select
             value={selectedTierFilter}
             onChange={(e) => setSelectedTierFilter(e.target.value)}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none text-xs"
+            className="px-2.5 py-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 focus:outline-none text-xs cursor-pointer"
           >
             <option value="all">All Tiers</option>
             <option value="Starter">Starter</option>
             <option value="Professional">Professional</option>
             <option value="Enterprise">Enterprise</option>
-            <option value="Custom White-Label">Custom White-Label</option>
+            <option value="Custom White-Label">White-Label</option>
           </select>
         </div>
       </div>
 
-      {/* VIEW 1: INTERACTIVE KANBAN BOARD */}
+      {/* VIEW 1: KANBAN BOARD */}
       {viewMode === 'kanban' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 overflow-x-auto pb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3.5 overflow-x-auto pb-4">
           {FUNNEL_STAGES.map((stageInfo) => {
             const stageDeals = filteredDeals.filter(d => d.stage === stageInfo.id);
             const stageValue = stageDeals.reduce((sum, d) => sum + d.dealValue, 0);
@@ -380,15 +370,16 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
             return (
               <div 
                 key={stageInfo.id}
-                className="bg-slate-50/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-3 flex flex-col min-w-[220px]"
+                className="bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] rounded-2xl p-3 flex flex-col min-w-[210px]"
               >
                 {/* Stage Header */}
-                <div className="pb-3 border-b border-slate-200/60 dark:border-slate-800 mb-3">
+                <div className="pb-2.5 border-b border-black/[0.04] dark:border-white/[0.06] mb-2.5">
                   <div className="flex items-center justify-between">
-                    <span className={`text-xs font-bold ${stageInfo.color}`}>
-                      {stageInfo.label}
+                    <span className="text-xs font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <span className={`w-2 h-2 rounded-full ${stageInfo.dotColor}`}></span>
+                      <span>{stageInfo.label}</span>
                     </span>
-                    <span className="text-[10px] font-mono bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 text-slate-500 font-bold">
+                    <span className="text-[10px] font-mono bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded-md border border-black/[0.04] dark:border-white/[0.06] text-slate-500 font-semibold">
                       {stageDeals.length}
                     </span>
                   </div>
@@ -399,47 +390,47 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                 </div>
 
                 {/* Deal Cards */}
-                <div className="space-y-3 flex-1 overflow-y-auto">
+                <div className="space-y-2.5 flex-1 overflow-y-auto">
                   {stageDeals.length === 0 ? (
-                    <div className="h-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-[11px] text-slate-400">
-                      No deals here
+                    <div className="h-20 border border-dashed border-black/[0.06] dark:border-white/[0.08] rounded-xl flex items-center justify-center text-[10px] text-slate-400">
+                      Empty
                     </div>
                   ) : (
                     stageDeals.map((deal) => (
                       <div
                         key={deal.id}
                         onClick={() => setSelectedDeal(deal)}
-                        className="p-3 bg-white dark:bg-slate-800/90 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-2xs hover:shadow-md hover:border-emerald-500/50 transition-all cursor-pointer space-y-2 group"
+                        className="apple-card rounded-xl p-3 space-y-2 cursor-pointer group hover:scale-[1.01] transition-all"
                       >
                         <div className="flex items-start justify-between">
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-mono">
+                          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-black/[0.04] dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 font-mono">
                             {deal.planTier}
                           </span>
-                          <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                          <span className="text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
                             {deal.probability}%
                           </span>
                         </div>
 
                         <div>
-                          <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                          <h4 className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                             {deal.companyName}
                           </h4>
                           <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                            {deal.contactName} · {deal.contactRole}
+                            {deal.contactName}
                           </p>
                         </div>
 
-                        <div className="flex items-center justify-between text-[11px] font-mono pt-1 border-t border-slate-100 dark:border-slate-700/60">
-                          <span className="font-bold text-slate-900 dark:text-white">₹{deal.dealValue.toLocaleString('en-IN')}</span>
+                        <div className="flex items-center justify-between text-[11px] font-mono pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
+                          <span className="font-semibold text-slate-900 dark:text-white">₹{deal.dealValue.toLocaleString('en-IN')}</span>
                           <span className="text-[10px] text-slate-400">{deal.seatsCount} seats</span>
                         </div>
 
-                        {/* Quick Action on Card */}
+                        {/* Quick Actions */}
                         {deal.stage === 'closed_won' ? (
                           <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); handleProvisionLicense(deal); }}
-                            className="w-full py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 shadow-xs"
+                            className="w-full py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-semibold flex items-center justify-center gap-1 shadow-2xs"
                           >
                             <Key className="w-3 h-3" />
                             <span>Provision Key</span>
@@ -448,7 +439,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                           <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); handleOpenQuotation(deal); }}
-                            className="w-full py-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-[10px] font-semibold flex items-center justify-center gap-1"
+                            className="w-full py-1 bg-black/[0.03] dark:bg-white/[0.05] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] text-slate-700 dark:text-slate-300 rounded-lg text-[10px] font-medium flex items-center justify-center gap-1 transition-colors"
                           >
                             <FileText className="w-3 h-3" />
                             <span>View Quote</span>
@@ -466,48 +457,47 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
       {/* VIEW 2: VISUAL SALES CONVERSION FUNNEL */}
       {viewMode === 'funnel' && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div className="apple-card rounded-2xl p-6 sm:p-7 space-y-6">
+          <div className="flex items-center justify-between pb-3 border-b border-black/[0.04] dark:border-white/[0.06]">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-emerald-500" />
-                Sales Funnel Conversion Velocity & Stage Drop-off
+                <span>Sales Funnel & Stage Drop-off Velocity</span>
               </h3>
               <p className="text-xs text-slate-400">
-                Visual conversion efficiency from initial inquiry to paid enterprise license delivery
+                Visual conversion efficiency from inbound inquiry to activated enterprise tenant
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg">
-              Overall Win Rate: {winRate}%
+            <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">
+              Win Rate: {winRate}%
             </span>
           </div>
 
-          <div className="space-y-4 max-w-4xl mx-auto py-2">
+          <div className="space-y-4 max-w-3xl mx-auto py-2">
             {FUNNEL_STAGES.map((st, idx) => {
               const count = deals.filter(d => d.stage === st.id).length;
               const val = deals.filter(d => d.stage === st.id).reduce((s, d) => s + d.dealValue, 0);
-              const percent = Math.max(15, Math.round((count / (deals.length || 1)) * 100));
+              const percent = Math.max(12, Math.round((count / (deals.length || 1)) * 100));
 
               return (
                 <div key={st.id} className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <div className="flex items-center justify-between text-xs font-medium text-slate-700 dark:text-slate-300">
                     <span className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] flex items-center justify-center font-bold font-mono">
-                        {idx + 1}
-                      </span>
-                      <span>{st.label}</span>
+                      <span className={`w-2 h-2 rounded-full ${st.dotColor}`}></span>
+                      <span className="font-semibold">{st.label}</span>
                       <span className="text-[11px] text-slate-400 font-normal">({st.description})</span>
                     </span>
-                    <div className="flex items-center space-x-4 font-mono">
-                      <span>{count} Opportunities</span>
+
+                    <div className="flex items-center space-x-3 font-mono">
+                      <span>{count} deals</span>
                       <strong className="text-slate-900 dark:text-white">₹{(val / 100000).toFixed(2)}L</strong>
                     </div>
                   </div>
 
                   {/* Funnel Progress Bar */}
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-6 rounded-xl overflow-hidden flex items-center p-1">
+                  <div className="w-full bg-black/[0.03] dark:bg-white/[0.04] h-5 rounded-full overflow-hidden flex items-center p-0.5">
                     <div
-                      className="bg-gradient-to-r from-emerald-600 to-teal-500 h-full rounded-lg transition-all duration-500 flex items-center justify-end pr-2 text-[10px] text-white font-bold font-mono"
+                      className="bg-gradient-to-r from-emerald-600 to-teal-400 h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[9px] text-white font-mono font-semibold"
                       style={{ width: `${percent}%` }}
                     >
                       {count > 0 && `${count}`}
@@ -520,11 +510,11 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
         </div>
       )}
 
-      {/* VIEW 3: ADVANCED DEALS TABLE */}
+      {/* VIEW 3: DEALS LEDGER */}
       {viewMode === 'table' && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
+        <div className="apple-card rounded-2xl overflow-hidden">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-400 border-b border-slate-200 dark:border-slate-800 font-semibold uppercase tracking-wider">
+            <thead className="bg-black/[0.02] dark:bg-white/[0.02] text-slate-400 border-b border-black/[0.04] dark:border-white/[0.06] font-semibold uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-3.5">Company & Contact</th>
                 <th className="p-3.5">Industry</th>
@@ -535,15 +525,15 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                 <th className="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+            <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
               {filteredDeals.map((deal) => (
                 <tr 
                   key={deal.id}
                   onClick={() => setSelectedDeal(deal)}
-                  className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 cursor-pointer transition-colors"
+                  className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] cursor-pointer transition-colors"
                 >
                   <td className="p-3.5">
-                    <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <div className="font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <Building2 className="w-3.5 h-3.5 text-slate-400" />
                       {deal.companyName}
                     </div>
@@ -555,14 +545,14 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                     {deal.industry}
                   </td>
                   <td className="p-3.5">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-black/[0.04] dark:bg-white/[0.06] text-slate-700 dark:text-slate-300">
                       {deal.planTier}
                     </span>
                   </td>
                   <td className="p-3.5 font-mono text-slate-700 dark:text-slate-300">
                     {deal.seatsCount} seats
                   </td>
-                  <td className="p-3.5 font-mono font-bold text-slate-900 dark:text-white">
+                  <td className="p-3.5 font-mono font-semibold text-slate-900 dark:text-white">
                     ₹{deal.dealValue.toLocaleString('en-IN')}
                     <span className="text-[10px] text-slate-400 block font-normal">/{deal.billingCycle}</span>
                   </td>
@@ -571,7 +561,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                       value={deal.stage}
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => handleMoveStage(deal.id, e.target.value as SalesFunnelStage)}
-                      className="text-xs font-semibold px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                      className="text-xs font-medium px-2 py-1 rounded-lg border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none"
                     >
                       {FUNNEL_STAGES.map(s => (
                         <option key={s.id} value={s.id}>{s.label}</option>
@@ -582,7 +572,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); handleOpenQuotation(deal); }}
-                      className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-md text-[11px] font-semibold"
+                      className="px-2.5 py-1 bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] text-slate-700 dark:text-slate-300 rounded-lg text-[11px] font-medium"
                     >
                       Quote
                     </button>
@@ -590,7 +580,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); handleProvisionLicense(deal); }}
-                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[11px] font-bold"
+                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-semibold"
                       >
                         Provision Key
                       </button>
@@ -603,16 +593,16 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
         </div>
       )}
 
-      {/* VIEW 4: CUSTOMER LICENSES & ENCRYPTED KEYS */}
+      {/* VIEW 4: CUSTOMER LICENSES */}
       {viewMode === 'licenses' && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs divide-y divide-slate-100 dark:divide-slate-800">
-          <div className="p-4 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Key className="w-4 h-4 text-emerald-500" />
-              Issued Cryptographic Software Licenses
+        <div className="apple-card rounded-2xl overflow-hidden divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+          <div className="p-4 bg-black/[0.02] dark:bg-white/[0.02] flex items-center justify-between">
+            <h3 className="text-xs font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <Key className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Verified Cryptographic Software Licenses</span>
             </h3>
             <span className="text-xs text-slate-400 font-mono">
-              {state.licenses.length} Verified Tenants
+              {state.licenses.length} Active Tenants
             </span>
           </div>
 
@@ -620,23 +610,23 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
             <div key={lic.id} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">{lic.organizationName}</h4>
-                  <span className="text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded">
+                  <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{lic.organizationName}</h4>
+                  <span className="text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full">
                     {lic.tier}
                   </span>
-                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">
+                  <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 uppercase">
                     ● {lic.status}
                   </span>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <span className="text-xs text-slate-400">Cryptographic Key:</span>
-                  <code className="text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 select-all">
+                  <code className="text-xs font-mono font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-md border border-black/[0.05] dark:border-white/[0.05] select-all">
                     {lic.licenseKey}
                   </code>
                   <button
                     onClick={() => handleCopy(lic.licenseKey)}
-                    className="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-white font-semibold flex items-center gap-1 ml-1"
+                    className="text-xs text-slate-500 hover:text-slate-900 dark:hover:text-white font-medium flex items-center gap-1 ml-1"
                   >
                     {copiedKey === lic.licenseKey ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedKey === lic.licenseKey ? 'Copied' : 'Copy'}</span>
@@ -652,7 +642,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                 <div className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                   Seat Quota: <strong className="font-mono text-emerald-600 dark:text-emerald-400 text-sm">{lic.activeSeats}</strong> / {lic.seatLimit} seats active
                 </div>
-                <div className="w-40 bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden ml-auto">
+                <div className="w-40 bg-black/[0.04] dark:bg-white/[0.06] h-1.5 rounded-full overflow-hidden ml-auto">
                   <div
                     className="bg-emerald-500 h-full rounded-full"
                     style={{ width: `${Math.min(100, (lic.activeSeats / lic.seatLimit) * 100)}%` }}
@@ -666,41 +656,41 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
       {/* MODAL 1: SLIDE-OVER DEAL DETAIL DRAWER */}
       {selectedDeal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex justify-end animate-in fade-in duration-150">
-          <div className="w-full max-w-lg bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl animate-in slide-in-from-right duration-200 space-y-6">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex justify-end animate-in fade-in duration-150">
+          <div className="w-full max-w-lg apple-glass border-l border-black/[0.06] dark:border-white/[0.08] h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl animate-in slide-in-from-right duration-200 space-y-6">
             <div>
               {/* Drawer Top */}
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+              <div className="flex items-center justify-between pb-4 border-b border-black/[0.04] dark:border-white/[0.06]">
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider font-mono">
                   Deal Record · {selectedDeal.id}
                 </span>
-                <button onClick={() => setSelectedDeal(null)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white">
-                  <X className="w-5 h-5" />
+                <button onClick={() => setSelectedDeal(null)} className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Deal Header */}
               <div className="pt-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     {selectedDeal.planTier} Tier
                   </span>
                   <span className="text-xs text-slate-400 font-mono">
                     Close Prob: <strong>{selectedDeal.probability}%</strong>
                   </span>
                 </div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                   {selectedDeal.companyName}
                 </h3>
-                <div className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+                <div className="text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400">
                   ₹{selectedDeal.dealValue.toLocaleString('en-IN')}
                   <span className="text-xs font-normal text-slate-400 ml-1">/{selectedDeal.billingCycle}</span>
                 </div>
               </div>
 
               {/* Stakeholder Details */}
-              <div className="mt-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
-                <div className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[10px]">
+              <div className="mt-5 p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] space-y-2 text-xs">
+                <div className="font-semibold text-slate-400 uppercase tracking-wider text-[10px]">
                   Client Decision Maker
                 </div>
                 <div className="font-semibold text-slate-900 dark:text-white text-sm">{selectedDeal.contactName}</div>
@@ -714,7 +704,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
               {/* Funnel Stage Selector */}
               <div className="mt-5 space-y-2">
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                   Advance Funnel Stage
                 </label>
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -723,13 +713,13 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                       key={st.id}
                       type="button"
                       onClick={() => handleMoveStage(selectedDeal.id, st.id)}
-                      className={`p-2 rounded-lg text-left font-semibold border transition-all ${
+                      className={`p-2.5 rounded-xl text-left font-medium border transition-all ${
                         selectedDeal.stage === st.id
-                          ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300'
-                          : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-semibold'
+                          : 'border-black/[0.06] dark:border-white/[0.08] text-slate-600 dark:text-slate-400 hover:border-black/20'
                       }`}
                     >
-                      <div className="text-[10px] uppercase font-mono">{st.label.slice(0, 15)}</div>
+                      <div className="text-[10px] uppercase font-mono">{st.label}</div>
                     </button>
                   ))}
                 </div>
@@ -737,23 +727,23 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
               {/* Notes & Next Steps */}
               <div className="mt-5 space-y-2 text-xs">
-                <div className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[10px]">
+                <div className="font-semibold text-slate-400 uppercase tracking-wider text-[10px]">
                   Next Immediate Action
                 </div>
-                <div className="p-3 rounded-lg bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-800/40 text-amber-900 dark:text-amber-300">
+                <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] text-slate-700 dark:text-slate-300">
                   {selectedDeal.nextStep || 'Schedule executive product demonstration call with technical board.'}
                 </div>
               </div>
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            <div className="pt-4 border-t border-black/[0.04] dark:border-white/[0.06] space-y-2">
               <button
                 type="button"
                 onClick={() => { handleOpenQuotation(selectedDeal); setSelectedDeal(null); }}
-                className="w-full py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md"
+                className="w-full py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-xs hover:opacity-95 transition-all"
               >
-                <FileText className="w-4 h-4" />
+                <FileText className="w-3.5 h-3.5" />
                 <span>Generate Official Quotation</span>
               </button>
 
@@ -761,16 +751,16 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                 <button
                   type="button"
                   onClick={() => { handleProvisionLicense(selectedDeal); setSelectedDeal(null); }}
-                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20"
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-xs"
                 >
-                  <Key className="w-4 h-4" />
+                  <Key className="w-3.5 h-3.5" />
                   <span>Provision Enterprise License Key</span>
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={() => handleMoveStage(selectedDeal.id, 'closed_won')}
-                  className="w-full py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-semibold rounded-xl text-xs"
+                  className="w-full py-2 bg-black/[0.03] dark:bg-white/[0.05] hover:bg-black/[0.06] text-slate-800 dark:text-slate-200 font-medium rounded-xl text-xs transition-colors"
                 >
                   Mark as Closed Won
                 </button>
@@ -782,19 +772,19 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
       {/* MODAL 2: OFFICIAL ENTERPRISE QUOTATION VIEWER */}
       {activeQuotation && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-2xl p-7 shadow-2xl space-y-6 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.06] dark:border-white/[0.08] rounded-2xl w-full max-w-2xl p-7 shadow-2xl space-y-6 animate-in zoom-in-95 duration-150">
             {/* Header */}
-            <div className="flex items-start justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-start justify-between pb-4 border-b border-black/[0.04] dark:border-white/[0.06]">
               <div>
-                <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center text-xs mb-2">
+                <div className="w-8 h-8 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold flex items-center justify-center text-xs mb-2">
                   AD
                 </div>
-                <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Aishnar Digital Technologies
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  Commercial ERP Software License Quotation
+                  Commercial Enterprise ERP License Quotation
                 </p>
               </div>
 
@@ -803,54 +793,54 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                   {activeQuotation.quoteNumber}
                 </span>
                 <span className="text-[10px] text-slate-400 block font-mono">Date: {activeQuotation.issuedAt}</span>
-                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Valid Until: {activeQuotation.validUntil}</span>
+                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Valid: 30 Days</span>
               </div>
             </div>
 
             {/* Bill To */}
             <div className="grid grid-cols-2 gap-4 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Prepared For</span>
-                <div className="font-bold text-slate-900 dark:text-white">{activeQuotation.clientCompany}</div>
+              <div className="p-3.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Prepared For</span>
+                <div className="font-semibold text-slate-900 dark:text-white">{activeQuotation.clientCompany}</div>
                 <div className="text-slate-500">{activeQuotation.clientContact}</div>
-                <div className="text-slate-400 font-mono mt-1">{activeQuotation.clientEmail}</div>
+                <div className="text-slate-400 font-mono mt-0.5">{activeQuotation.clientEmail}</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Commercial Terms</span>
-                <div>Plan: <strong className="text-slate-900 dark:text-white">{activeQuotation.planTier} Edition</strong></div>
-                <div>Seats Quota: <strong className="text-slate-900 dark:text-white">{activeQuotation.seats} User Licenses</strong></div>
-                <div>Terms: <strong className="text-slate-900 dark:text-white">{activeQuotation.paymentTerms}</strong></div>
+              <div className="p-3.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]">
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Commercial Terms</span>
+                <div>Edition: <strong className="text-slate-900 dark:text-white">{activeQuotation.planTier}</strong></div>
+                <div>Quota: <strong className="text-slate-900 dark:text-white">{activeQuotation.seats} User Licenses</strong></div>
+                <div>Billing: <strong className="text-slate-900 dark:text-white">{activeQuotation.paymentTerms}</strong></div>
               </div>
             </div>
 
             {/* Quotation Line Items */}
-            <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden text-xs">
+            <div className="border border-black/[0.06] dark:border-white/[0.08] rounded-xl overflow-hidden text-xs">
               <table className="w-full text-left">
-                <thead className="bg-slate-50 dark:bg-slate-800/60 font-semibold text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                <thead className="bg-black/[0.02] dark:bg-white/[0.02] font-semibold text-slate-500 border-b border-black/[0.04] dark:border-white/[0.06]">
                   <tr>
                     <th className="p-3">Item Description</th>
                     <th className="p-3">Qty</th>
                     <th className="p-3 text-right">Amount (₹)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
                   <tr>
                     <td className="p-3">
-                      <div className="font-bold text-slate-900 dark:text-white">Aishnar Digital-ERP {activeQuotation.planTier} Annual License</div>
+                      <div className="font-semibold text-slate-900 dark:text-white">Aishnar Digital-ERP {activeQuotation.planTier} Annual License</div>
                       <div className="text-[11px] text-slate-400">Includes Today Cockpit, 200+ SOP Checklists, TV Display Mode, and Supabase Cloud Sync</div>
                     </td>
                     <td className="p-3 font-mono">{activeQuotation.seats} Seats</td>
-                    <td className="p-3 text-right font-mono font-bold">₹{activeQuotation.baseAmount.toLocaleString('en-IN')}</td>
+                    <td className="p-3 text-right font-mono font-semibold">₹{activeQuotation.baseAmount.toLocaleString('en-IN')}</td>
                   </tr>
                   <tr>
                     <td className="p-3 text-slate-500">Government GST Tax (18%)</td>
                     <td className="p-3 font-mono">18%</td>
                     <td className="p-3 text-right font-mono">₹{activeQuotation.taxAmount.toLocaleString('en-IN')}</td>
                   </tr>
-                  <tr className="bg-slate-50/50 dark:bg-slate-800/40 font-bold text-sm">
+                  <tr className="bg-black/[0.02] dark:bg-white/[0.03] font-semibold text-xs">
                     <td colSpan={2} className="p-3 text-slate-900 dark:text-white">Total Commercial Value (INR)</td>
-                    <td className="p-3 text-right font-mono text-emerald-600 dark:text-emerald-400">
+                    <td className="p-3 text-right font-mono text-emerald-600 dark:text-emerald-400 text-sm">
                       ₹{activeQuotation.totalAmount.toLocaleString('en-IN')}
                     </td>
                   </tr>
@@ -863,18 +853,18 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold rounded-xl text-xs flex items-center gap-1.5"
+                className="px-3.5 py-2 bg-black/[0.03] dark:bg-white/[0.05] hover:bg-black/[0.06] text-slate-800 dark:text-slate-200 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition-colors"
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Print Official Quotation PDF</span>
+                <span>Print Quotation PDF</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveQuotation(null)}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-xs"
+                className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-semibold rounded-xl text-xs shadow-xs"
               >
-                Close Quote
+                Close
               </button>
             </div>
           </div>
@@ -883,92 +873,92 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
 
       {/* MODAL 3: ADD ENTERPRISE OPPORTUNITY WIZARD */}
       {showAddDealModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-xl p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.06] dark:border-white/[0.08] rounded-2xl w-full max-w-xl p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-black/[0.04] dark:border-white/[0.06]">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-emerald-600" />
-                <span>New ERP Client Sales Opportunity</span>
+                <span>New Sales Opportunity</span>
               </h3>
               <button onClick={() => setShowAddDealModal(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleCreateDeal} className="space-y-3.5 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Company / Organization *</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Company / Organization *</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Reliance Logistics Group"
+                    placeholder="e.g. Zenith Logistics Group"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Industry Vertical</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Industry Vertical</label>
                   <input
                     type="text"
                     placeholder="e.g. Supply Chain / Healthcare"
                     value={industry}
                     onChange={(e) => setIndustry(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Contact Person Name</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Decision Maker Name</label>
                   <input
                     type="text"
-                    placeholder="e.g. Sanjeev Kapoor"
+                    placeholder="e.g. Rajesh Sharma"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Designation / Role</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Designation / Role</label>
                   <input
                     type="text"
-                    placeholder="e.g. Managing Director"
+                    placeholder="e.g. Chief Operating Officer"
                     value={contactRole}
                     onChange={(e) => setContactRole(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Work Email *</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Work Email *</label>
                   <input
                     type="email"
                     required
-                    placeholder="sanjeev@company.com"
+                    placeholder="rajesh@company.com"
                     value={contactEmail}
                     onChange={(e) => setContactEmail(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Phone Number</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Phone Number</label>
                   <input
                     type="text"
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Plan Edition</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Plan Edition</label>
                   <select
                     value={planTier}
                     onChange={(e) => {
@@ -979,7 +969,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                       if (t === 'Enterprise') { setDealValue('350000'); setSeatsCount('50'); }
                       if (t === 'Custom White-Label') { setDealValue('750000'); setSeatsCount('100'); }
                     }}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   >
                     <option value="Starter">Starter (10 seats)</option>
                     <option value="Professional">Professional (25 seats)</option>
@@ -989,33 +979,33 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                 </div>
 
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Seat Quota</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Seat Quota</label>
                   <input
                     type="number"
                     value={seatsCount}
                     onChange={(e) => setSeatsCount(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none font-mono"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Contract Value (₹)</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Contract Value (₹)</label>
                   <input
                     type="number"
                     value={dealValue}
                     onChange={(e) => setDealValue(e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none font-mono font-bold"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none font-mono font-semibold"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Starting Funnel Stage</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Starting Stage</label>
                   <select
                     value={stage}
                     onChange={(e) => setStage(e.target.value as SalesFunnelStage)}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   >
                     {FUNNEL_STAGES.map(s => (
                       <option key={s.id} value={s.id}>{s.label}</option>
@@ -1024,11 +1014,11 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                 </div>
 
                 <div>
-                  <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">Payment Terms</label>
+                  <label className="block text-slate-500 font-medium mb-1 text-[11px]">Payment Terms</label>
                   <select
                     value={paymentTerms}
                     onChange={(e) => setPaymentTerms(e.target.value as SoftwareSalesDeal['paymentTerms'])}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none"
                   >
                     <option value="Annual Upfront">Annual Upfront (100%)</option>
                     <option value="Net 30">Net 30 Invoicing</option>
@@ -1038,17 +1028,17 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex justify-end space-x-2 pt-3 border-t border-black/[0.04] dark:border-white/[0.06]">
                 <button
                   type="button"
                   onClick={() => setShowAddDealModal(false)}
-                  className="px-4 py-2 text-slate-500 hover:text-slate-800"
+                  className="px-4 py-2 text-slate-500 hover:text-slate-800 text-xs font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs"
+                  className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-semibold rounded-xl text-xs shadow-xs"
                 >
                   Save Opportunity
                 </button>

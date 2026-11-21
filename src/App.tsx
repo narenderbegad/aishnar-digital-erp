@@ -20,7 +20,7 @@ import { UserRole, UserProfile } from './types';
 
 const AUTH_STORAGE_KEY = 'aishnar_erp_auth_user_v1';
 
-export function App() {
+export default function App() {
   const [state, setState] = useState<ERPStoreState>(loadStore);
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
     try {
@@ -76,11 +76,12 @@ export function App() {
         if (isTvBoardOpen) setIsTvBoardOpen(false);
         if (isSearchOpen) setIsSearchOpen(false);
         if (isNotificationsOpen) setIsNotificationsOpen(false);
+        if (isAdminGuideOpen) setIsAdminGuideOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isTvBoardOpen, isSearchOpen, isNotificationsOpen]);
+  }, [isTvBoardOpen, isSearchOpen, isNotificationsOpen, isAdminGuideOpen]);
 
   // If unauthenticated, show secure Login View
   if (!currentUser) {
@@ -90,16 +91,16 @@ export function App() {
   // Role friendly name
   const getRoleName = (role: UserRole) => {
     switch (role) {
-      case 'super_admin': return 'Super Admin (Founder)';
-      case 'sales_admin': return 'Sales Admin (SaaS Revenue)';
-      case 'project_manager': return 'Enterprise Project Manager';
-      case 'team_member': return 'Senior Cloud Engineer';
-      case 'client_viewer': return 'Client Portal Representative';
+      case 'super_admin': return 'Super Admin';
+      case 'sales_admin': return 'Sales Director';
+      case 'project_manager': return 'Delivery Lead';
+      case 'team_member': return 'Operations Specialist';
+      case 'client_viewer': return 'Client Observer';
     }
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 dark:bg-slate-950 font-sans antialiased text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#000000] font-sans antialiased text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
       {/* Left Sidebar */}
       <Sidebar
         currentTab={currentTab}
@@ -129,7 +130,7 @@ export function App() {
         />
 
         {/* View Content */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto p-5 sm:p-7 lg:p-8">
           <div className="max-w-6xl mx-auto">
             {currentTab === 'today' && (
               <TodayView
@@ -183,7 +184,7 @@ export function App() {
         </main>
       </div>
 
-      {/* Overlays & Modals */}
+      {/* Global Modals & Overlays */}
       <TVWallboard
         isOpen={isTvBoardOpen}
         onClose={() => setIsTvBoardOpen(false)}
@@ -194,21 +195,28 @@ export function App() {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         state={state}
-        onNavigate={setCurrentTab}
+        onNavigate={(tab) => {
+          setCurrentTab(tab);
+          setIsSearchOpen(false);
+        }}
       />
 
       <NotificationsDrawer
         isOpen={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
+        state={state}
       />
 
       <AdminVisualGuideModal
         isOpen={isAdminGuideOpen}
         onClose={() => setIsAdminGuideOpen(false)}
-        onNavigateTab={(tab) => setCurrentTab(tab)}
+        onNavigateTab={(tab) => {
+          setCurrentTab(tab);
+          setIsAdminGuideOpen(false);
+        }}
       />
     </div>
   );
 }
 
-export default App;
+export { App };

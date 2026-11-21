@@ -56,83 +56,83 @@ Unlike old, bloated ERP systems that confuse your employees, Aishnar Digital-ERP
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 select-none animate-in fade-in duration-150">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-4xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 select-none animate-in fade-in duration-150">
+      <div className="apple-card rounded-3xl w-full max-w-4xl h-[85vh] flex flex-col shadow-2xl overflow-hidden border border-black/[0.06] dark:border-white/[0.08]">
         {/* Modal Header */}
-        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="p-5 border-b border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between bg-black/[0.02] dark:bg-white/[0.02]">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-950 flex items-center justify-center font-bold text-xs shadow-xs">
               AD
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <span>Aishnar Digital-ERP · Super Admin & Sales Playbook</span>
-                <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold">
-                  Ready to Sell
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                <span>Super Admin & Sales Playbook</span>
+                <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full font-semibold">
+                  Commercial Guide
                 </span>
               </h2>
-              <p className="text-xs text-slate-400">
-                Complete walkthrough, client demonstration guide, and super admin operations manual
+              <p className="text-[11px] text-slate-400">
+                Walkthrough script, client demo playbook, and super admin operations manual
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-lg transition-colors"
+            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Section Navigation Tabs */}
-        <div className="flex items-center space-x-2 px-6 pt-3 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs">
+        <div className="flex items-center space-x-2 px-6 pt-2.5 border-b border-black/[0.04] dark:border-white/[0.06] bg-black/[0.01] dark:bg-white/[0.01] text-xs">
           <button
             onClick={() => setActiveSection('demo')}
-            className={`pb-2.5 px-3 font-semibold border-b-2 transition-all flex items-center gap-1.5 ${
+            className={`pb-2 px-3 font-medium border-b-2 transition-all flex items-center gap-1.5 ${
               activeSection === 'demo'
-                ? 'border-emerald-600 text-emerald-600 dark:text-emerald-400'
+                ? 'border-slate-900 dark:border-white text-slate-950 dark:text-white font-semibold'
                 : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>5-Min Client Demo Tour</span>
+            <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+            <span>5-Min Client Demo</span>
           </button>
 
           <button
             onClick={() => setActiveSection('admin')}
-            className={`pb-2.5 px-3 font-semibold border-b-2 transition-all flex items-center gap-1.5 ${
+            className={`pb-2 px-3 font-medium border-b-2 transition-all flex items-center gap-1.5 ${
               activeSection === 'admin'
-                ? 'border-emerald-600 text-emerald-600 dark:text-emerald-400'
+                ? 'border-slate-900 dark:border-white text-slate-950 dark:text-white font-semibold'
                 : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Super Admin Operations</span>
+            <span>Super Admin Manual</span>
           </button>
 
           <button
             onClick={() => setActiveSection('pricing')}
-            className={`pb-2.5 px-3 font-semibold border-b-2 transition-all flex items-center gap-1.5 ${
+            className={`pb-2 px-3 font-medium border-b-2 transition-all flex items-center gap-1.5 ${
               activeSection === 'pricing'
-                ? 'border-emerald-600 text-emerald-600 dark:text-emerald-400'
+                ? 'border-slate-900 dark:border-white text-slate-950 dark:text-white font-semibold'
                 : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <DollarSign className="w-3.5 h-3.5" />
-            <span>Commercial Pricing & Tiers</span>
+            <span>Pricing & Packages</span>
           </button>
 
           <button
             onClick={() => setActiveSection('pitch')}
-            className={`pb-2.5 px-3 font-semibold border-b-2 transition-all flex items-center gap-1.5 ${
+            className={`pb-2 px-3 font-medium border-b-2 transition-all flex items-center gap-1.5 ${
               activeSection === 'pitch'
-                ? 'border-emerald-600 text-emerald-600 dark:text-emerald-400'
+                ? 'border-slate-900 dark:border-white text-slate-950 dark:text-white font-semibold'
                 : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Zap className="w-3.5 h-3.5" />
-            <span>Sales Pitch & Objection Handling</span>
+            <span>Sales Pitch & Script</span>
           </button>
         </div>
 

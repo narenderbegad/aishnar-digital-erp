@@ -1,9 +1,11 @@
 import React from 'react';
-import { X, Bell, CheckCircle2, TrendingUp, AlertTriangle, Key } from 'lucide-react';
+import { X, Bell, TrendingUp, AlertTriangle, Key } from 'lucide-react';
+import { ERPStoreState } from '../../lib/store';
 
 interface NotificationsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  state?: ERPStoreState;
 }
 
 export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({ isOpen, onClose }) => {
@@ -38,14 +40,14 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({ isOpen
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/40 backdrop-blur-xs select-none">
-      <div className="absolute inset-y-0 right-0 max-w-sm w-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <div className="absolute inset-y-0 right-0 max-w-sm w-full apple-glass border-l border-black/[0.06] dark:border-white/[0.08] shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+        <div className="p-4 border-b border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Bell className="w-4 h-4 text-emerald-500" />
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Activity Notifications</h3>
+            <Bell className="w-3.5 h-3.5 text-emerald-500" />
+            <h3 className="text-xs font-semibold text-slate-900 dark:text-white">Activity Notifications</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
-            <X className="w-5 h-5" />
+          <button onClick={onClose} className="p-1.5 text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-full hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -53,13 +55,13 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({ isOpen
           {notifications.map((n) => {
             const Icon = n.icon;
             return (
-              <div key={n.id} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 space-y-1">
+              <div key={n.id} className="p-3.5 rounded-2xl border border-black/[0.04] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.02] space-y-1">
                 <div className="flex items-start space-x-3">
-                  <div className={`p-2 rounded-lg ${n.color} shrink-0`}>
-                    <Icon className="w-4 h-4" />
+                  <div className={`p-2 rounded-xl ${n.color} shrink-0`}>
+                    <Icon className="w-3.5 h-3.5" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-white">{n.title}</div>
+                    <div className="text-xs font-semibold text-slate-900 dark:text-white">{n.title}</div>
                     <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{n.desc}</div>
                     <div className="text-[10px] text-slate-400 font-mono mt-1">{n.time}</div>
                   </div>

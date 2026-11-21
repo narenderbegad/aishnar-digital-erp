@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { 
-  Plus, 
-  Key, 
-  Building2, 
-  FileText, 
-  Search, 
-  ArrowRight, 
-  Check, 
-  Copy, 
-  Printer, 
-  Layers, 
-  Kanban, 
-  BarChart3, 
-  ShieldCheck, 
+import {
+  Plus,
+  Key,
+  Building2,
+  FileText,
+  Search,
+  ArrowRight,
+  Check,
+  Copy,
+  Printer,
+  Layers,
+  Kanban,
+  BarChart3,
+  ShieldCheck,
   ArrowUpRight,
   ChevronDown,
   X,
@@ -197,9 +197,9 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
   };
 
   const filteredDeals = state.salesDeals.filter(d => {
-    const matchesSearch = d.companyName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          d.contactName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          d.contactEmail.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = d.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      d.contactName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      d.contactEmail.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTier = selectedTierFilter === 'all' || d.planTier === selectedTierFilter;
     return matchesSearch && matchesTier;
   });
@@ -369,7 +369,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
             const stageValue = stageDeals.reduce((sum, d) => sum + d.dealValue, 0);
 
             return (
-              <div 
+              <div
                 key={stageInfo.id}
                 className="bg-[#15151a] border border-white/10 rounded-3xl p-3 flex flex-col min-w-[215px]"
               >
@@ -527,7 +527,7 @@ export const SoftwareSalesView: React.FC<SoftwareSalesViewProps> = ({ state, onU
             </thead>
             <tbody className="divide-y divide-white/5">
               {filteredDeals.map((deal) => (
-                <tr 
+                <tr
                   key={deal.id}
                   onClick={() => setSelectedDeal(deal)}
                   className="hover:bg-white/[0.02] cursor-pointer transition-colors"

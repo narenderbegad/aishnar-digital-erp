@@ -22,7 +22,7 @@ export interface StandingDuty {
   frequency: 'daily' | 'weekly';
   isCompleted: boolean;
   assignedTo: string;
-  category: 'Security' | 'Code Quality' | 'Client Review' | 'Operations' | 'Finance';
+  category: 'Security' | 'Code Quality' | 'Client Review' | 'Operations' | 'Finance' | 'Hospitality' | 'Audio/Visuals' | 'F&B / Catering' | 'Decor & Safety';
 }
 
 export interface ProjectTask {
@@ -63,7 +63,7 @@ export interface EnterpriseProject {
   criticalAlert?: string;
   venue?: string;
   guestCount?: number;
-  eventType?: 'Destination Wedding' | 'Luxury Royal Wedding' | 'Celebrity Gala' | 'High-Net-Worth Conclave';
+  eventType?: 'Destination Wedding' | 'Luxury Royal Wedding' | 'Celebrity Gala' | 'High-Net-Worth Conclave' | 'Palace Wedding (2 Days)' | 'Beachfront Destination' | 'Destination Wedding (3 Days)';
   countdownDays?: number;
 }
 
@@ -72,7 +72,7 @@ export interface ExpenseClaim {
   claimantName: string;
   claimantRole: string;
   title: string;
-  category: 'Cloud Infrastructure' | 'Software Licenses' | 'Hardware' | 'Client Travel' | 'Office Operations';
+  category: 'Cloud Infrastructure' | 'Software Licenses' | 'Hardware' | 'Client Travel' | 'Office Operations' | 'Guest Hospitality' | 'Audio/Visuals' | 'Decor & Florals';
   amount: number;
   date: string;
   receiptUrl?: string;

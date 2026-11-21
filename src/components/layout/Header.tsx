@@ -1,9 +1,9 @@
 import React from 'react';
-import { 
-  Search, 
-  Bell, 
-  Moon, 
-  Sun, 
+import {
+  Search,
+  Bell,
+  Moon,
+  Sun,
   Sparkles,
   ChevronDown,
   Globe
